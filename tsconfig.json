@@ -1,0 +1,31 @@
+{
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "node",
+    "module": "es2020",
+    "target": "esnext",
+    "jsx": "preserve",
+    "jsxImportSource": "@raycenity/devolve-ui",
+    "baseUrl": "./",
+    "rootDir": "src",
+    "paths": {
+      "*": ["./src/*"],
+      "@raycenity/devolve-ui/jsx-runtime": ["../devolve-ui/out/types/jsx-runtime.d.ts"]
+    },
+    "skipLibCheck": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "./out/types",
+    "declarationMap": true,
+    "composite": true,
+    "isolatedModules": true
+  },
+  "references": [
+    { "path": "../devolve-ui" },
+    { "path": "../misc-ts" }
+  ]
+}
