@@ -1,1 +1,1 @@
-export {main as wordle} from 'wordle'
+export { main as wordle } from 'wordle'

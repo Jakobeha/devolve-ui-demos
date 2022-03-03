@@ -1,7 +1,8 @@
+// eslint-disable-next-line camelcase
 export const import_meta_url =
   typeof document === 'undefined'
     ? new URL('file:' + process.cwd()).href
-    : (document.currentScript && document.currentScript.src || new URL('index.js', document.baseURI).href)
+    : ((document.currentScript && document.currentScript.src) || new URL('index.js', document.baseURI).href)
 
 globalThis.require = name => {
   switch (name) {

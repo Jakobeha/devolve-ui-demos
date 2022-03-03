@@ -1,4 +1,4 @@
-import { DevolveUI, React, useDelay, useInput, useState } from '@raycenity/devolve-ui'
+import { DevolveUI, React, useDelay, useInput, useState, VNode } from '@raycenity/devolve-ui'
 import { range } from '@raycenity/misc-ts'
 import additionalGuesses from 'additional-guesses.txt'
 import chosenWords from 'chosen-words.txt'
@@ -60,7 +60,7 @@ function getColor (index: number, knowledge: 'unknown' | 'miss' | 'yellow' | { g
   }
 }
 
-const Character = ({ character, color }: CharacterProps) => {
+const Character = ({ character, color }: CharacterProps): VNode => {
   return (
     <box width={5} height={3} direction='overlap'>
       <text x={2} y={1}>{character}</text>
@@ -74,7 +74,7 @@ const Character = ({ character, color }: CharacterProps) => {
   )
 }
 
-const Row = ({ guess, knowledge }: RowProps) => (
+const Row = ({ guess, knowledge }: RowProps): VNode => (
   <hbox>
     {range(5).map(i => {
       const character = guess[i]
@@ -84,7 +84,7 @@ const Row = ({ guess, knowledge }: RowProps) => (
   </hbox>
 )
 
-const Wordle = ({ knowledge, prevGuesses, prompts: { guess, invalidGuess, won } }: WordleProps) => {
+const Wordle = ({ knowledge, prevGuesses, prompts: { guess, invalidGuess, won } }: WordleProps): VNode => {
   let [currentGuess, setCurrentGuess] = useState<string>('')
 
   useInput(key => {
@@ -126,7 +126,7 @@ const Wordle = ({ knowledge, prevGuesses, prompts: { guess, invalidGuess, won } 
   )
 }
 
-export async function main() {
+export async function main (): Promise<void> {
   const random = Math.random()
   const chosenWord = CHOSEN_WORD_LIST[Math.floor(random * CHOSEN_WORD_LIST.length)]
 
@@ -143,7 +143,7 @@ export async function main() {
       [...guess].forEach((character, index) => {
         if (chosenWord[index] === character) {
           wordle.p.knowledge[character] = { green: index }
-        } else if (chosenWord.indexOf(character) !== -1) {
+        } else if (chosenWord.includes(character)) {
           if (typeof wordle.p.knowledge[character] !== 'object') {
             wordle.p.knowledge[character] = 'yellow'
           }
