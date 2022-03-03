@@ -1,7 +1,10 @@
-import { DevolveUI, RootProps, useState, useInput } from '@raycenity/devolve-ui'
+import { DevolveUI, React, useDelay, useInput, useState } from '@raycenity/devolve-ui'
+import { range } from '@raycenity/misc-ts'
+import additionalGuesses from 'additional-guesses.txt'
+import chosenWords from 'chosen-words.txt'
 
-const ACCEPTABLE_WORD_LIST = ['TODOO']
-const CHOSEN_WORD_LIST = ['TODOO']
+const CHOSEN_WORD_LIST = chosenWords.split('\n').map(word => word.toUpperCase())
+const ACCEPTABLE_WORD_LIST = [...CHOSEN_WORD_LIST, ...additionalGuesses.split('\n').map(word => word.toUpperCase())]
 const ALPHABET = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
 
 type Color = 'gray' | 'yellow' | 'green'
@@ -31,6 +34,10 @@ interface WordleProps {
       resolve: (word: string) => void
     }
     invalidGuess?: {
+      guess: string
+      resolve: () => void
+    }
+    won?: {
       resolve: () => void
     }
   }
@@ -55,8 +62,13 @@ function getColor (index: number, knowledge: 'unknown' | 'miss' | 'yellow' | { g
 
 const Character = ({ character, color }: CharacterProps) => {
   return (
-    <box width={3} height={3} >
-      <text x={1} y={1} width={1} height={1}>{character}</text>
+    <box width={5} height={3} direction='overlap'>
+      <text x={2} y={1}>{character}</text>
+      <text>
+        ┌───┐{'\n'}
+        │   │{'\n'}
+        └───┘
+      </text>
       <color name={color} />
     </box>
   )
@@ -64,36 +76,52 @@ const Character = ({ character, color }: CharacterProps) => {
 
 const Row = ({ guess, knowledge }: RowProps) => (
   <hbox>
-    {Array(5).map((_, i) => {
+    {range(5).map(i => {
       const character = guess[i]
       const color = getColor(i, knowledge?.[character] ?? 'unknown')
-      return <Character character={guess[i] ?? ''} color={color} />
+      return <Character key={i} character={guess[i] ?? ''} color={color} />
     })}
   </hbox>
 )
 
-const Wordle = ({ knowledge, prevGuesses, prompts: { guess, invalidGuess } }: WordleProps) => {
-  const [currentGuess, setCurrentGuess] = useState<string>('')
+const Wordle = ({ knowledge, prevGuesses, prompts: { guess, invalidGuess, won } }: WordleProps) => {
+  let [currentGuess, setCurrentGuess] = useState<string>('')
 
   useInput(key => {
     if (guess !== undefined) {
       if (ALPHABET.includes(key.name.toUpperCase())) {
-        setCurrentGuess(currentGuess() + key.name.toUpperCase())
-        if (currentGuess().length === 5) {
-          guess.resolve(currentGuess())
+        currentGuess += key.name.toUpperCase()
+        if (currentGuess.length === 5) {
+          guess.resolve(currentGuess)
+          setCurrentGuess('')
+        } else {
+          setCurrentGuess(currentGuess)
         }
-      } else if (key.name === 'Backspace' && currentGuess().length > 0) {
-        setCurrentGuess(currentGuess().slice(0, -1))
+      } else if (key.name === 'Backspace' && currentGuess.length > 0) {
+        setCurrentGuess(currentGuess.slice(0, -1))
       }
     }
   })
 
-  // TODO: show invalid guess
+  useDelay(1000, () => {
+    invalidGuess?.resolve()
+  }, { onDefine: [invalidGuess] })
+
+  useDelay(5000, () => {
+    won?.resolve()
+  }, { onDefine: [won] })
 
   return (
-    <vbox anchorX={0.5} anchorY={0.5}>
-      {prevGuesses.map(guess => <Row guess={guess} knowledge={knowledge} />)}
-      <Row guess={currentGuess()} />
+    <vbox>
+      <box height={3}>
+        <text x={1} y={1}>W o r d l e</text>
+      </box>
+      <vbox>
+        {prevGuesses.map((guess, i) => <Row key={i} guess={guess} knowledge={knowledge} />)}
+        <Row guess={currentGuess} />
+        {invalidGuess !== undefined ? <text>Invalid Guess: {invalidGuess.guess}</text> : null}
+        {won !== undefined ? <text>You won! {prevGuesses.length} attempts</text> : null}
+      </vbox>
     </vbox>
   )
 }
@@ -103,18 +131,19 @@ export async function main() {
   const chosenWord = CHOSEN_WORD_LIST[Math.floor(random * CHOSEN_WORD_LIST.length)]
 
   const wordle = new DevolveUI<WordleProps>(Wordle, { knowledge: {}, prevGuesses: [], won: false })
-  while (true) {
-    const guess = await wordle.prompt('guess', {})
+  wordle.show()
+
+  while (!wordle.p.won) {
+    const guess = (await wordle.prompt('guess', {}))
     if (guess === chosenWord) {
       wordle.p.won = true
-      return
     }
     if (ACCEPTABLE_WORD_LIST.includes(guess)) {
       wordle.p.prevGuesses.push(guess);
       [...guess].forEach((character, index) => {
         if (chosenWord[index] === character) {
           wordle.p.knowledge[character] = { green: index }
-        } else if (chosenWord.indexOf(guess) !== -1) {
+        } else if (chosenWord.indexOf(character) !== -1) {
           if (typeof wordle.p.knowledge[character] !== 'object') {
             wordle.p.knowledge[character] = 'yellow'
           }
@@ -122,13 +151,14 @@ export async function main() {
           wordle.p.knowledge[character] = 'miss'
         }
       })
-      return
     } else {
-      await wordle.prompt('invalidGuess', {})
+      await wordle.prompt('invalidGuess', { guess })
     }
   }
+
+  await wordle.prompt('won', {})
 }
 
-if (typeof require !== 'undefined' && require.main === module) {
+if (process?.argv[1].endsWith('wordle.js')) {
   void main()
 }
