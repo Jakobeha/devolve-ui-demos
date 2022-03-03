@@ -118,9 +118,8 @@ const Wordle = ({ knowledge, prevGuesses, prompts: { guess, invalidGuess, won } 
       </box>
       <vbox>
         {prevGuesses.map((guess, i) => <Row key={i} guess={guess} knowledge={knowledge} />)}
-        <Row guess={currentGuess} />
+        {won !== undefined ? <text>You won! {prevGuesses.length} attempts</text> : <Row guess={currentGuess} />}
         {invalidGuess !== undefined ? <text>Invalid Guess: {invalidGuess.guess}</text> : null}
-        {won !== undefined ? <text>You won! {prevGuesses.length} attempts</text> : null}
       </vbox>
     </vbox>
   )
