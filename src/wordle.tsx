@@ -64,11 +64,7 @@ const Character = ({ character, color }: CharacterProps): VNode => {
   return (
     <box width={5} height={3} direction='overlap'>
       <text x={2} y={1}>{character}</text>
-      <text>
-        ┌───┐{'\n'}
-        │   │{'\n'}
-        └───┘
-      </text>
+      <border style='single' />
       <color name={color} />
     </box>
   )
@@ -159,6 +155,6 @@ export async function main (): Promise<void> {
   await wordle.prompt('won', {})
 }
 
-if (process?.argv[1].endsWith('wordle.js')) {
+if (typeof window !== 'undefined' || process?.argv[1].endsWith('wordle.js')) {
   void main()
 }
