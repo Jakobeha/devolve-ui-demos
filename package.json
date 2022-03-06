@@ -14,6 +14,7 @@
     "watch": "run-p typegen-watch codegen-watch",
     "lint": "node ts-standardx.mjs",
     "lint-fix": "node ts-standardx.mjs --fix",
+    "live-server": "node live-server.mjs",
     "real-test": "echo 'No tests yet'",
     "test": "run-s lint real-test",
     "prepare": "husky install"
@@ -40,6 +41,7 @@
     "esbuild": "^0.14.9",
     "eslint": "^5.0.0 || ^6.0.0 || ^7.0.0",
     "husky": "^7.0.4",
+    "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
     "pixi.js": "^6.2.2",
     "ts-standard": "^11.0.0",
