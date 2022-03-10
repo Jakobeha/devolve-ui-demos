@@ -4,6 +4,7 @@
 // region Boilerplate
 const esbuild = require('esbuild')
 const builtinModules = require('builtin-modules')
+const fs = require('fs-extra')
 
 const entryPoints = [
   './src/index.js',
@@ -12,6 +13,16 @@ const entryPoints = [
 ]
 
 const nodeModules = builtinModules.flatMap(moduleName => [moduleName, `node:${moduleName}`])
+
+fs.remove('./out/assets').catch(err => {
+  if (err.code !== 'ENOENT') {
+    throw err
+  }
+}).then(() => {
+  fs.copy('./assets', './out/assets').catch(err => {
+    console.error('copy assets failed', err)
+  })
+})
 
 // Shared node.js / browser build
 esbuild.build({
