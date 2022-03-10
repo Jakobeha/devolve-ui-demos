@@ -13,8 +13,7 @@
     "baseUrl": "./",
     "rootDir": "src",
     "paths": {
-      "*": ["./src/*"],
-      "@raycenity/devolve-ui/jsx-runtime": ["../devolve-ui/out/types/jsx-runtime.d.ts"]
+      "*": ["./src/*"]
     },
     "skipLibCheck": true,
     "emitDeclarationOnly": true,

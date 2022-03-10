@@ -6,7 +6,9 @@ const esbuild = require('esbuild')
 const builtinModules = require('builtin-modules')
 
 const entryPoints = [
-  './src/wordle.js'
+  './src/index.js',
+  './src/wordle.js',
+  './src/readme.js'
 ]
 
 const nodeModules = builtinModules.flatMap(moduleName => [moduleName, `node:${moduleName}`])

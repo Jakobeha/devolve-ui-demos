@@ -1,4 +1,4 @@
-import { DevolveUI, React, useDelay, useInput, useState, VNode } from '@raycenity/devolve-ui'
+import { PromptDevolveUI, React, useDelay, useInput, useState, VNode } from '@raycenity/devolve-ui'
 import { range } from '@raycenity/misc-ts'
 import additionalGuesses from 'additional-guesses.txt'
 import chosenWords from 'chosen-words.txt'
@@ -27,8 +27,6 @@ interface WordleProps {
   knowledge: Knowledge
   prevGuesses: string[]
   won: boolean
-
-  messages: {}
   prompts: {
     guess?: {
       resolve: (word: string) => void
@@ -62,11 +60,11 @@ function getColor (index: number, knowledge: 'unknown' | 'miss' | 'yellow' | { g
 
 const Character = ({ character, color }: CharacterProps): VNode => {
   return (
-    <box width={5} height={3} direction='overlap'>
+    <zbox width={5} height={3}>
       <text x={2} y={1}>{character}</text>
       <border style='single' />
-      <color name={color} />
-    </box>
+      <color color={color} />
+    </zbox>
   )
 }
 
@@ -126,7 +124,7 @@ export async function main (): Promise<void> {
   const random = Math.random()
   const chosenWord = CHOSEN_WORD_LIST[Math.floor(random * CHOSEN_WORD_LIST.length)]
 
-  const wordle = new DevolveUI<WordleProps>(Wordle, { knowledge: {}, prevGuesses: [], won: false })
+  const wordle = new PromptDevolveUI<WordleProps>(Wordle, { knowledge: {}, prevGuesses: [], won: false })
   wordle.show()
 
   while (!wordle.p.won) {
