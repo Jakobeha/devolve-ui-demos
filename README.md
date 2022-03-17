@@ -4,7 +4,7 @@
 
 See [devolve-ui](https://github.com/Jakobeha/devolve-ui)
 
-**Live demos: standalone @ [demos/index.html](demos/index.html), with CGE @ [https://cge.raycenity.net/demos/](https://cge.raycenity.net/demos/)**
+**[Live demo](https://jakobeha.github.io/devolve-ui-demos/index.html) | [Latest build (TUI demo)](https://github.com/Jakobeha/devolve-ui-demos/releases/lastest)**
 
 ## Installing
 
