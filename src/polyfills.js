@@ -4,6 +4,8 @@ export const import_meta_url =
     ? new URL('file:' + process.cwd()).href
     : ((document.currentScript && document.currentScript.src) || new URL('index.js', document.baseURI).href)
 
+globalThis.UPNG = globalThis.UPNG || {}
+
 globalThis.require = name => {
   switch (name) {
     case 'util':
