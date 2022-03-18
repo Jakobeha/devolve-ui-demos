@@ -14,8 +14,6 @@ devolve-ui-demos can be installed using [npm](https://www.npmjs.com/) or [pnpm](
 pnpm install @raycenity/devolve-ui-demos
 ```
 
-Alternatively you can just download the built code directly [here](https://github.com/Jakobeha/devolve-ui-demos/releases/latest). The code is an unminified ES module (learn about ES modules [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules))
+### Repository info
 
-## Repository info (e.g. for contributing)
-
-devolve-ui-demos is built using [esbuild](https://esbuild.org/). The package manager used is [pnpm](https://pnpm.io/). Linting is done by [standard](https://standardjs.com/), however we use a *slightly* modified version removing some warnings which is run through `pnpm run lint` (specifically `node ts-standardx.mjs`).
+devolve-ui is built using [esbuild](https://esbuild.org/). The package manager used is [pnpm](https://pnpm.io/). Linting is done by [standard](https://standardjs.com/), however we use a slightly modified version removing some warnings (`ts-standardx.mjs`). Feel free to submit issues / pull requests on the [Github](https://github.com/Jakobeha/devolve-ui).
