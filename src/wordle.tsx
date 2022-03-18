@@ -8,9 +8,10 @@ const ACCEPTABLE_WORD_LIST = [...CHOSEN_WORD_LIST, ...additionalGuesses.split('\
 const ALPHABET = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
 
 type Color = 'gray' | 'yellow' | 'green'
+type CharKnowledge = 'unknown' | 'miss' | 'yellow' | { green: Set<number> }
 
 interface Knowledge {
-  [character: string]: 'unknown' | 'miss' | 'yellow' | { green: number }
+  [character: string]: CharKnowledge
 }
 
 interface CharacterProps {
@@ -41,7 +42,7 @@ interface WordleProps {
   }
 }
 
-function getColor (index: number, knowledge: 'unknown' | 'miss' | 'yellow' | { green: number }): Color {
+function getColor (index: number, knowledge: CharKnowledge): Color {
   if (typeof knowledge === 'string') {
     switch (knowledge) {
       case 'unknown':
@@ -51,7 +52,7 @@ function getColor (index: number, knowledge: 'unknown' | 'miss' | 'yellow' | { g
       case 'yellow':
         return 'yellow'
     }
-  } else if (knowledge.green === index) {
+  } else if (knowledge.green.has(index)) {
     return 'green'
   } else {
     return 'yellow'
@@ -136,7 +137,10 @@ export async function main (): Promise<void> {
       wordle.p.prevGuesses.push(guess);
       [...guess].forEach((character, index) => {
         if (chosenWord[index] === character) {
-          wordle.p.knowledge[character] = { green: index }
+          if (typeof wordle.p.knowledge[character] !== 'object') {
+            wordle.p.knowledge[character] = { green: new Set() }
+          }
+          (wordle.p.knowledge[character] as { green: Set<number> }).green.add(index)
         } else if (chosenWord.includes(character)) {
           if (typeof wordle.p.knowledge[character] !== 'object') {
             wordle.p.knowledge[character] = 'yellow'

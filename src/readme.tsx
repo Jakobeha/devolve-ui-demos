@@ -14,13 +14,13 @@ const App = ({ name }: AppProps): VNode => {
     <zbox width='100%'>
       <vbox x={2} y={1} gap={1} width='100% - 4'>
         <zbox width='100%'>
-          <hbox x={1} y={1} width='28'>
+          <zbox x={1} y={1} width='32'>
             <text color='yellow'>Hello {name}</text>
             <text color='yellow' x='100%' anchorX={1}>{counter} seconds</text>
-          </hbox>
-          <border style='rounded' color='yellow' width='30' height='prev + 2' />
+          </zbox>
+          <border style='rounded' color='yellow' width='34' height='prev + 2' />
         </zbox>
-        <source src='../assets/dog.png' width='30' height='10' />
+        <source src='../assets/dog.png' width='34' height='16' />
       </vbox>
       <border style='rounded' color='blue' width='100%' height='prev + 2' />
     </zbox>
