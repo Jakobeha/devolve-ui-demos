@@ -1,6 +1,6 @@
 {
   "name": "@raycenity/devolve-ui-demos",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "demos for devolve-ui",
   "type": "module",
   "main": "out/src/index.js",
@@ -17,6 +17,8 @@
     "live-server": "node live-server.mjs",
     "real-test": "echo 'No tests yet'",
     "test": "run-s lint real-test",
+    "gh-deploy": "./gh-deploy.sh",
+    "publish": "run-s test gh-deploy",
     "prepare": "husky install"
   },
   "repository": {

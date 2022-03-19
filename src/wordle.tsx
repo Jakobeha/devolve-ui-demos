@@ -1,4 +1,4 @@
-import { PromptDevolveUI, React, useDelay, useInput, useState, VNode } from '@raycenity/devolve-ui'
+import { PLATFORM, PromptDevolveUI, React, useDelay, useInput, useState, VNode } from '@raycenity/devolve-ui'
 import { range } from '@raycenity/misc-ts'
 import additionalGuesses from 'additional-guesses.txt'
 import chosenWords from 'chosen-words.txt'
@@ -109,13 +109,13 @@ const Wordle = ({ knowledge, prevGuesses, prompts: { guess, invalidGuess, won } 
   return (
     <vbox>
       <box height={3}>
-        <text x={1} y={1}>W o r d l e</text>
+        <text x={1} y={1} color='white'>W o r d l e</text>
       </box>
       <vbox>
         {prevGuesses.slice(-5).map((guess, i) => <Row key={i} guess={guess} knowledge={knowledge} />)}
         {guess !== undefined ? <Row guess={currentGuess} /> : null}
-        {invalidGuess !== undefined ? <text>Invalid Guess: {invalidGuess.guess}</text> : null}
-        {won !== undefined ? <text>You won! {prevGuesses.length} attempts</text> : null}
+        {invalidGuess !== undefined ? <text color='white'>Invalid Guess: {invalidGuess.guess}</text> : null}
+        {won !== undefined ? <text color='white'>You won! {prevGuesses.length} attempts</text> : null}
       </vbox>
     </vbox>
   )
@@ -125,7 +125,13 @@ export async function main (): Promise<void> {
   const random = Math.random()
   const chosenWord = CHOSEN_WORD_LIST[Math.floor(random * CHOSEN_WORD_LIST.length)]
 
-  const wordle = new PromptDevolveUI<WordleProps>(Wordle, { knowledge: {}, prevGuesses: [], won: false })
+  const wordle = new PromptDevolveUI<WordleProps>(Wordle, { knowledge: {}, prevGuesses: [], won: false }, PLATFORM === 'web'
+    ? ({
+        width: 560,
+        height: 336,
+        view: (document.getElementById('wordle') as HTMLCanvasElement | null) ?? undefined
+      })
+    : {})
   wordle.show()
 
   while (!wordle.p.won) {

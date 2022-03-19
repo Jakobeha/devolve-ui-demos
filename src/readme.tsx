@@ -1,4 +1,4 @@
-import { DevolveUI, React, useInterval, useState, VNode } from '@raycenity/devolve-ui'
+import { DevolveUI, PLATFORM, React, useInterval, useState, VNode } from '@raycenity/devolve-ui'
 
 interface AppProps {
   name: string
@@ -20,13 +20,19 @@ const App = ({ name }: AppProps): VNode => {
           </zbox>
           <border style='rounded' color='yellow' width='34' height='prev + 2' />
         </zbox>
-        <source src='../assets/dog.png' width='34' height='16' />
+        <source src='/devolve-ui-demos/assets/dog.png' width='34' height='16' />
       </vbox>
       <border style='rounded' color='blue' width='100%' height='prev + 2' />
     </zbox>
   )
 }
 
-new DevolveUI(App, { name: 'devolve-ui' }).show()
+new DevolveUI(App, { name: 'devolve-ui' }, PLATFORM === 'web'
+  ? ({
+      width: 560,
+      height: 336,
+      view: (document.getElementById('readme') as HTMLCanvasElement | null) ?? undefined
+    })
+  : {}).show()
 
 // Works in node or browser (with additional pixi.js script)
