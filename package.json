@@ -1,6 +1,6 @@
 {
   "name": "@raycenity/devolve-ui-demos",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "demos for devolve-ui",
   "type": "module",
   "main": "out/src/index.js",
